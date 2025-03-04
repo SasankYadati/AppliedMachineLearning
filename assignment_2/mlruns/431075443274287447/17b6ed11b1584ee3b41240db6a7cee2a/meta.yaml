@@ -1,0 +1,15 @@
+artifact_uri: file:///mnt/c/Users/saisa/AppliedMachineLearning/assignment_2/mlruns/431075443274287447/17b6ed11b1584ee3b41240db6a7cee2a/artifacts
+end_time: 1741084699571
+entry_point_name: ''
+experiment_id: '431075443274287447'
+lifecycle_stage: active
+run_id: 17b6ed11b1584ee3b41240db6a7cee2a
+run_name: Logistic Regression
+run_uuid: 17b6ed11b1584ee3b41240db6a7cee2a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741084683694
+status: 3
+tags: []
+user_id: turing
