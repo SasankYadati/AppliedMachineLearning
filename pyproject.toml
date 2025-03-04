@@ -1,5 +1,5 @@
 [project]
-name = "assignment-2"
+name = "appliedmachinelearning"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -13,10 +13,4 @@ dependencies = [
     "numpy>=2.2.3",
     "pandas>=2.2.3",
     "scikit-learn>=1.6.1",
-    "seaborn>=0.13.2",
-]
-
-[dependency-groups]
-dev = [
-    "ipykernel>=6.29.5",
 ]
