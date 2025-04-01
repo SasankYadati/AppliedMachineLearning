@@ -8,12 +8,7 @@ def score(text: str,
          threshold: float) -> Tuple[bool, float]:
     X = vectorizer.transform([text])
     
-    try:
-        propensity = model.predict_proba(X)[0][1]
-        print(propensity)
-    except AttributeError:
-        raise ValueError("Model must support predict_proba method")
-    
+    propensity = model.predict_proba(X)[0][1]    
     prediction = bool(propensity >= threshold)
     
     return prediction, propensity 
