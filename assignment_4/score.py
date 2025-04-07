@@ -1,5 +1,4 @@
 import sklearn
-import numpy as np
 from typing import Tuple
 
 def score(text: str, 

@@ -14,9 +14,7 @@ def score_endpoint():
             return jsonify({'error': 'No text provided'}), 400
         
         text = data['text']
-        
         prediction, propensity = score(text, model, vectorizer, threshold=0.5)
-        
         return jsonify({
             'prediction': bool(prediction),
             'propensity': float(propensity)
@@ -26,4 +24,4 @@ def score_endpoint():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000) 
+    app.run(host="0.0.0.0", port=5000)

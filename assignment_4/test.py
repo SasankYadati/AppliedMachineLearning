@@ -48,15 +48,6 @@ def test_score(model, vectorizer):
     assert prediction == False
     assert propensity < 0.5
 
-def wait_for_flask(timeout=10):
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        try:
-            requests.get('http://localhost:5000/')
-            return True
-        except requests.ConnectionError:
-            time.sleep(0.1)
-    return False
 
 def test_flask():
     try:
@@ -68,10 +59,8 @@ def test_flask():
         )
         
         # Wait for Flask to actually be ready
-        if not wait_for_flask():
-            stdout, stderr = process.communicate()
-            raise RuntimeError(f"Flask app failed to start or become ready.\nStdout: {stdout}\nStderr: {stderr}")
-            
+        time.sleep(20)
+        
         response = requests.post(
             'http://localhost:5000/score',
             json={'text': 'Test message'}
@@ -121,3 +110,43 @@ def test_flask():
                 process.wait(timeout=5)
             except subprocess.TimeoutExpired:
                 process.kill()
+
+def test_docker():
+    try:
+        # Build the Docker image
+        subprocess.run(["docker", "build", "-t", "spam-classifier", "."], check=True)
+
+        # Run the Docker container
+        container = subprocess.Popen(
+            ["docker", "run", "-p", "5000:5000", "spam-classifier"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        # Wait for Flask to actually be ready
+        time.sleep(20)
+        
+        # Test the Docker container
+        response = requests.post(
+            'http://localhost:5000/score',
+            json={'text': 'Test message'}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert 'prediction' in data
+        assert 'propensity' in data
+        assert isinstance(data['prediction'], bool)
+        assert isinstance(data['propensity'], float)
+        assert 0 <= data['propensity'] <= 1 
+        
+    except Exception as e:
+        print(f"Docker test failed with error: {str(e)}")
+        raise
+    finally:
+        if 'container' in locals():
+            container.terminate()
+            try:
+                container.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                container.kill()
